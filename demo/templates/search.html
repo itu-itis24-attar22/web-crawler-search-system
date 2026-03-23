@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexSearch Index</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .search-hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            {% if results %}
+            margin-top: 1rem;
+            {% else %}
+            margin-top: 15vh;
+            {% endif %}
+            transition: margin-top 0.5s ease;
+            width: 100%;
+        }
+        .search-input-wrapper {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .search-input {
+            width: 100%;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.2rem !important;
+            border-radius: 50px !important;
+            background: rgba(22, 27, 34, 0.8) !important;
+            border: 2px solid var(--card-border) !important;
+            color: white;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.2) !important;
+        }
+        .search-input:focus {
+            border-color: var(--accent-color) !important;
+            box-shadow: 0 0 20px var(--accent-glow) !important;
+            outline: none;
+        }
+        .search-btn {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            bottom: 8px;
+            border-radius: 40px;
+            padding: 0 1.5rem;
+            margin: 0;
+            height: calc(100% - 16px);
+            display: flex;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-hero">
+        <h1 style="font-size: 3.5rem; margin-bottom: 1.5rem;">NexSearch Index</h1>
+        <form method="GET" action="/search" class="search-input-wrapper">
+            <input type="text" name="query" class="search-input" value="{{ query }}" placeholder="Search the index..." autocomplete="off">
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+    </div>
+    
+    {% if query and not results %}
+    <div class="container" style="text-align: center; max-width: 800px;">
+        <p style="font-size: 1.2rem; color: var(--text-secondary);">No matches found for <b style="color: var(--text-primary);">"{{ query }}"</b></p>
+        <p style="margin-top: 1rem; color: var(--text-secondary);">Try adjusting your keywords or <a href="/crawler">start a new crawling sequence</a> to discover more content.</p>
+    </div>
+    {% elif results %}
+    <div class="container" style="max-width: 800px;">
+        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.9rem;">
+            Discovered <b style="color: var(--text-primary);">{{ results|length }}</b> relevant documents for "{{ query }}"
+        </p>
+        
+        <div class="results-layout">
+            {% for r in results %}
+            <div class="result-card">
+                <div class="result-title">
+                    <a href="{{ r.relevant_url }}" target="_blank" class="result-link" style="font-size: 1.1rem;">{{ r.relevant_url }}</a>
+                </div>
+                <div class="result-meta">
+                    <span style="color: var(--success-color); font-weight: 500;">Score: {{ r.total_frequency }}</span>
+                    <span>&bull;</span>
+                    <span>Depth: {{ r.depth }}</span>
+                    <span>&bull;</span>
+                    <span title="{{ r.origin_url }}">Origin: {{ r.origin_url[:40] }}{% if r.origin_url|length > 40 %}...{% endif %}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    
+    <div style="margin-top: auto; text-align: center; padding: 2rem;">
+        <a href="/crawler" style="font-size: 1rem; color: var(--text-secondary); text-decoration: none;" onmouseover="this.style.color='var(--accent-color)'" onmouseout="this.style.color='var(--text-secondary)'">&larr; Spider Dashboard</a>
+    </div>
+</body>
+</html>
