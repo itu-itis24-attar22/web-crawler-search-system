@@ -1,0 +1,17 @@
+{
+  "crawler_id": "1774046471_660ced94",
+  "origin_url": "https://nurixsy.com/",
+  "max_depth": 1,
+  "hit_rate_seconds": 1.0,
+  "max_urls_to_visit": 20,
+  "queue_capacity": 20,
+  "status": "completed",
+  "created_at": "2026-03-20T22:41:11.925983+00:00",
+  "updated_at": "2026-03-20T22:41:11.948713+00:00",
+  "processed_count": 0,
+  "discovered_count": 0,
+  "queued_count": 0,
+  "throttled": false,
+  "throttled_ever": false,
+  "error_message": ""
+}
